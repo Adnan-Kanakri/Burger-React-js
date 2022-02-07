@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from "react";
 import { connect } from "react-redux";
 
-import * as actionType from "../../store/actions";
+import * as actionType from "../../store/actions/index";
 import BuildControls from "../../components/Burger/BuildControls/BuildControls";
 import Burger from "../../components/Burger/Burger";
 import OrderSummary from "../../components/Burger/orderSummary/OrderSummary";
@@ -27,12 +27,8 @@ class BurgerBuilder extends Component {
 
 
     componentDidMount() {
-        // console.log(this.props)
-        // console.log(this.props)
-        // axios.get("https://mybyrgerproject-default-rtdb.firebaseio.com/ingredients.json")
-        //     .then((res) => {
-        //         this.setState({ ingredient: res.data })
-        //     })
+        this.props.onInitIngredient();
+       
     }
 
     updatePurchasableState = (ingredients) => {
@@ -144,7 +140,7 @@ class BurgerBuilder extends Component {
             disableInfo[key] = disableInfo[key] <= 0;
         }
         let orderSummary = null
-        let burger = <Spinner />
+        let burger =this.props.error ?<p>the ingredient can't be loaded </p> :<Spinner />
         if (this.props.ings) {
             burger = (
                 <Fragment>
@@ -186,12 +182,15 @@ class BurgerBuilder extends Component {
 
 const mapStateToProps = (state) => ({
     ings: state.ingredient,
-    price: state.totalPrice
+    price: state.totalPrice,
+    error:state.error,
+
 });
 
 const mapDispatchToProps = dispatch => ({
-    onIngredientAdd: (ing) => dispatch({ type: actionType.ADD_INGREDIENT, ingredientName: ing }),
-    onIngredientRemove: (ing) => dispatch({ type: actionType.REMOVE_INGREDIENT, ingredientName: ing })
+    onIngredientAdd: (ing) => dispatch(actionType.addIngredient(ing)),
+    onIngredientRemove: (ing) => dispatch(actionType.removeIngredient(ing)),
+    onInitIngredient: () => dispatch(actionType.initIngredient())
 });
 
 
