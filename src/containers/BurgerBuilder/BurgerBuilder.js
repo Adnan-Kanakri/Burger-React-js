@@ -6,14 +6,13 @@ import BuildControls from "../../components/Burger/BuildControls/BuildControls";
 import Burger from "../../components/Burger/Burger";
 import OrderSummary from "../../components/Burger/orderSummary/OrderSummary";
 import Modal from "../../components/UI/model/modal";
-// import Aux from "../../hoc/auxiliary";
+
 import axios from "../../axios-orders";
 import Spinner from "../../components/UI/Spinner/Spinner";
 import withErrorHandler from './../../WithErrorHandler/WithErrorHandler';
 
 import hoc from "../../hoc/UseProps/RouteProps"
 
-// import {useMatch , useParams, } from "react-router-dom"
 
 
 
@@ -25,10 +24,8 @@ class BurgerBuilder extends Component {
         loading: false,
     };
 
-
     componentDidMount() {
         this.props.onInitIngredient();
-       
     }
 
     updatePurchasableState = (ingredients) => {
@@ -140,7 +137,7 @@ class BurgerBuilder extends Component {
             disableInfo[key] = disableInfo[key] <= 0;
         }
         let orderSummary = null
-        let burger =this.props.error ?<p>the ingredient can't be loaded </p> :<Spinner />
+        let burger = this.props.error ? <p>the ingredient can't be loaded </p> : <Spinner />
         if (this.props.ings) {
             burger = (
                 <Fragment>
@@ -181,9 +178,9 @@ class BurgerBuilder extends Component {
 }
 
 const mapStateToProps = (state) => ({
-    ings: state.ingredient,
-    price: state.totalPrice,
-    error:state.error,
+    ings: state.burger.ingredient,
+    price: state.burger.totalPrice,
+    error: state.burger.error,
 
 });
 

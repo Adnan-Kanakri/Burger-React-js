@@ -1,11 +1,13 @@
 import React, { Component } from 'react'
 import Button from './../../../components/UI/Button/Button';
 import styled from './Contact-Data.module.css'
-import axios from "../../../axios-orders";
+// import axios from "../../../axios-orders";
 import Spinner from './../../../components/UI/Spinner/Spinner';
 import RouteProps from './../../../hoc/UseProps/RouteProps';
 import Input from '../../../components/UI/Input/Input';
 import { connect } from "react-redux"
+import * as actionType from "../../../store/actions/index";
+
 // import validation from "validator";
 import {
     validName,
@@ -14,6 +16,8 @@ import {
     validStreet,
     validZipCode
 } from "../../../hoc/validation/validTools";
+
+
 
 class ContactData extends Component {
     state = {
@@ -103,7 +107,6 @@ class ContactData extends Component {
                 touched: false
             },
         },
-        loading: false,
     }
     orderHandler = (event) => {
         event.preventDefault();
@@ -115,54 +118,37 @@ class ContactData extends Component {
             }
             formData[key] = this.state.orderForm[key].value
         }
-        this.setState({
-            loading: true
-        })
         const order = {
             ingredient: this.props.ings,
             price: this.props.price,
             orderData: formData
         }
-        axios.post("/order.json", order).then(res => {
-            this.setState({
-                loading: false,
-            })
-            this.props.nav("/");
-        }).catch(err => {
-            this.setState({
-                loading: false,
-            })
-        });
+        this.props.onOrderBurger(order);
     }
 
     checkValidity = (value, rule) => {
         let isValid = false;
         if (rule.hasOwnProperty("validName")) {
-            console.log("name");
             if (rule.validName(value)) {
                 isValid = validName(value);
             }
         }
         if (rule.hasOwnProperty("validStreet")) {
-            console.log("street");
             if (rule.validStreet(value)) {
                 isValid = validStreet(value);
             }
         }
         if (rule.hasOwnProperty("validCountry")) {
-            console.log("country");
             if (rule.validCountry(value)) {
                 isValid = validCountry(value);
             }
         }
         if (rule.hasOwnProperty("validEmail")) {
-            console.log("email");
             if (rule.validEmail(value)) {
                 isValid = validEmail(value);
             }
         }
         if (rule.hasOwnProperty("validZipCode")) {
-            console.log("zipCode");
             if (rule.validZipCode(value)) {
                 isValid = validZipCode(value);
             }
@@ -211,7 +197,7 @@ class ContactData extends Component {
             })}
             <Button btnType="Success">ORDER</Button>
         </form>);
-        if (this.state.loading) {
+        if (this.props.loading) {
             form = <Spinner />
         }
 
@@ -226,10 +212,14 @@ class ContactData extends Component {
 
 
 const mapStateToProps = (state) => ({
-    ings: state.ingredient,
-    price: state.totalPrice
+    ings: state.burger.ingredient,
+    price: state.burger.totalPrice,
+    loading:state.order.loading,
+});
+
+const mapDispatchToProps = dispatch => ({
+    onOrderBurger: (orderData) => dispatch(actionType.purchasBurger(orderData)),
 });
 
 
-
-export default connect(mapStateToProps)(RouteProps(ContactData))
+export default connect(mapStateToProps, mapDispatchToProps)(RouteProps(ContactData))

@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import CheckOutSummary from '../../components/Order/CheckOutSummary/CheckOutSummary'
 import RouteProps from '../../hoc/UseProps/RouteProps';
 import { Route, Routes } from "react-router-dom"
-import {connect} from "react-redux"
+import { connect } from "react-redux"
 
 import ContactData from './Contact-Data/Contact-Data';
 
@@ -32,27 +32,24 @@ class CheckOut extends Component {
     }
 
     render() {
-        return (
-            <div>
-                <CheckOutSummary
-                    ingredients={this.props.ings}
-                    checkOutCancel={this.checkOutCancelledHandler}
-                    checkOutContinue={this.checkOutContinuedHandler}
-                />
-                <Routes>
-                    <Route path="Contact-data"
-                        element={<ContactData 
-                        />} />
-                </Routes>
-            </div>
-
-        )
+       return (<div>
+            <CheckOutSummary
+                ingredients={this.props.ings}
+                checkOutCancel={this.checkOutCancelledHandler}
+                checkOutContinue={this.checkOutContinuedHandler}
+            />
+            <Routes>
+                <Route path="Contact-data"
+                    element={<ContactData
+                    />} />
+            </Routes>
+        </div>)
     }
 }
 const mapStateToProps = (state) => ({
-    ings: state.ingredient,
-    price: state.totalPrice
+    ings: state.burger.ingredient,
+    price: state.burger.totalPrice
 });
 
 
-export default connect(mapStateToProps) (RouteProps(CheckOut))
+export default connect(mapStateToProps)(RouteProps(CheckOut))

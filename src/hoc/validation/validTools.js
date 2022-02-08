@@ -18,13 +18,10 @@ export const validName = (value) => {
 }
 export const validEmail = (value) => {
     let {
-        role1, role2, role3, role4
+        role3
     } = true
-    role1 = validator.isLowercase(value);
-    role2 = validator.isAlpha(value);
     role3 = validator.isEmail(value);
-    role4 = validator.trim(value) !== " ";
-    if (role1 && role2 && role3 && role4) {
+    if (role3 ) {
         return true
     } else {
         return false;
